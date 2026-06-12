@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Result Portal</title>
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Arial', sans-serif;
+        }
+
+        body {
+            background-color: #f4f7f6;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 500px;
+            padding: 20px;
+        }
+
+        .card {
+            background: #ffffff;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        h2 {
+            color: #2c3e50;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #7f8c8d;
+            margin-bottom: 20px;
+            font-size: 14px;
+        }
+
+        .input-group {
+            margin-bottom: 15px;
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 5px;
+            color: #34495e;
+            font-weight: bold;
+            font-size: 14px;
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            outline: none;
+            font-size: 16px;
+        }
+
+        .input-group input:focus {
+            border-color: #3498db;
+        }
+
+        .btn {
+            width: 100%;
+            padding: 12px;
+            background-color: #3498db;
+            border: none;
+            color: white;
+            font-size: 16px;
+            font-weight: bold;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .btn:hover {
+            background-color: #2980b9;
+        }
+
+        .btn-secondary {
+            padding: 8px 15px;
+            background-color: #e74c3c;
+            border: none;
+            color: white;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .error {
+            color: #e74c3c;
+            margin-top: 10px;
+            text-align: center;
+            font-size: 14px;
+            font-weight: bold;
+        }
+
+        /* Result Section Hidden Settings */
+        .hidden {
+            display: none;
+        }
+
+        .result-header {
+            text-align: center;
+            border-bottom: 2px solid #3498db;
+            padding-bottom: 10px;
+            margin-bottom: 15px;
+        }
+
+        .student-info {
+            margin-bottom: 20px;
+            line-height: 1.6;
+            background: #f9f9f9;
+            padding: 10px;
+            border-radius: 5px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+
+        table th, table td {
+            border: 1px solid #ddd;
+            padding: 10px;
+            text-align: left;
+        }
+
+        table th {
+            background-color: #34495e;
+            color: white;
+        }
+
+        .result-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-top: 1px solid #ddd;
+            padding-top: 15px;
+        }
+
+        .pass-tag {
+            background: #2ecc71;
+            color: white;
+            padding: 3px 10px;
+            border-radius: 3px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <div id="login-box" class="card">
+            <h2>Student Login</h2>
+            <p class="subtitle">Enter your details to check your result</p>
+            
+            <div class="input-group">
+                <label for="student-id">Roll Number / Student ID</label>
+                <input type="text" id="student-id" placeholder="Eg. 1234" required>
+            </div>
+
+            <div class="input-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" placeholder="Enter Password" required>
+            </div>
+
+            <button onclick="checkResult()" class="btn">View Result</button>
+            <p id="error-msg" class="error"></p>
+        </div>
+
+        <div id="result-box" class="card hidden">
+            <div class="result-header">
+                <h2>Balaji Computer Center</h2>
+                <p>Official Student Progress Report</p>
+            </div>
+            
+            <div class="student-info">
+                <p><strong>Student Name:</strong> <span id="res-name"></span></p>
+                <p><strong>Roll No:</strong> <span id="res-id"></span></p>
+                <p><strong>Course:</strong> <span id="res-course"></span></p>
+            </div>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>Subject / Topic</th>
+                        <th>Max Marks</th>
+                        <th>Marks Obtained</th>
+                    </tr>
+                </thead>
+                <tbody id="marks-table">
+                    </tbody>
+            </table>
+
+            <div class="result-footer">
+                <p><strong>Status:</strong> <span id="res-status" class="pass-tag">PASS</span></p>
+                <button onclick="logout()" class="btn-secondary">Log Out</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Students Data (Yahan Seenu ka data add ho gaya hai)
+        const studentDatabase = {
+            "1234": {
+                password: "12345",
+                name: "Seenu",
+                course: "ADCA (Advance Diploma in Computer Applications)",
+                marks: [
+                    { subject: "Computer Fundamentals", max: 100, obtained: 88 },
+                    { subject: "Operating System & MS Office", max: 100, obtained: 92 },
+                    { subject: "Internet & Web Designing", max: 100, obtained: 85 }
+                ]
+            },
+            "STU101": {
+                password: "password123",
+                name: "Rahul Kumar",
+                course: "DCA (Diploma in Computer Applications)",
+                marks: [
+                    { subject: "Fundamental of Computer", max: 100, obtained: 85 },
+                    { subject: "MS Office (Word, Excel, PPT)", max: 100, obtained: 90 },
+                    { subject: "Internet & Web Technology", max: 100, obtained: 78 }
+                ]
+            },
+            "STU102": {
+                password: "pass456",
+                name: "Anushka Sharma",
+                course: "ADCA (Advance Diploma)",
+                marks: [
+                    { subject: "HTML & CSS", max: 100, obtained: 92 },
+                    { subject: "JavaScript Programming", max: 100, obtained: 81 },
+                    { subject: "Tally Prime ERP", max: 100, obtained: 88 }
+                ]
+            }
+        };
+
+        function checkResult() {
+            const studentId = document.getElementById("student-id").value.trim();
+            const password = document.getElementById("password").value;
+            const errorMsg = document.getElementById("error-msg");
+
+            if (studentId === "" || password === "") {
+                errorMsg.innerText = "Please fill all fields.";
+                return;
+            }
+
+            if (studentDatabase[studentId]) {
+                const student = studentDatabase[studentId];
+
+                if (student.password === password) {
+                    errorMsg.innerText = ""; 
+                    showResult(studentId, student);
+                } else {
+                    errorMsg.innerText = "Incorrect Password!";
+                }
+            } else {
+                errorMsg.innerText = "Student ID not found!";
+            }
+        }
+
+        function showResult(id, student) {
+            document.getElementById("login-box").classList.add("hidden");
+            document.getElementById("result-box").classList.remove("hidden");
+
+            document.getElementById("res-name").innerText = student.name;
+            document.getElementById("res-id").innerText = id;
+            document.getElementById("res-course").innerText = student.course;
+
+            const tableBody = document.getElementById("marks-table");
+            tableBody.innerHTML = ""; 
+
+            student.marks.forEach(item => {
+                let row = `<tr>
+                    <td>${item.subject}</td>
+                    <td>${item.max}</td>
+                    <td>${item.obtained}</td>
+                </tr>`;
+                tableBody.innerHTML += row;
+            });
+        }
+
+        function logout() {
+            document.getElementById("student-id").value = "";
+            document.getElementById("password").value = "";
+            document.getElementById("result-box").classList.add("hidden");
+            document.getElementById("login-box").classList.remove("hidden");
+        }
+    </script>
+</body>
+</html>
