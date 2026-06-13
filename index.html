@@ -23,7 +23,7 @@
 
         .container {
             width: 100%;
-            max-width: 500px;
+            max-width: 550px; /* टेबल में कॉलम बढ़ने की वजह से चौड़ाई थोड़ी बढ़ा दी है */
             padding: 20px;
         }
 
@@ -143,6 +143,12 @@
             color: white;
         }
 
+        /* Total Row Styling */
+        .total-row {
+            font-weight: bold;
+            background-color: #eaeded;
+        }
+
         .result-footer {
             display: flex;
             justify-content: space-between;
@@ -153,6 +159,14 @@
 
         .pass-tag {
             background: #2ecc71;
+            color: white;
+            padding: 3px 10px;
+            border-radius: 3px;
+            font-weight: bold;
+        }
+        
+        .fail-tag {
+            background: #e74c3c;
             color: white;
             padding: 3px 10px;
             border-radius: 3px;
@@ -174,7 +188,7 @@
 
             <div class="input-group">
                 <label for="password">Password</label>
-                <input type="password" id="password" placeholder="DOB-01012001" required>
+                <input type="password" id="password" placeholder="Enter Password" required>
             </div>
 
             <button onclick="checkResult()" class="btn">View Result</button>
@@ -199,31 +213,30 @@
                         <th>Subject / Topic</th>
                         <th>Max Marks</th>
                         <th>Marks Obtained</th>
+                        <th>Grade</th>
                     </tr>
                 </thead>
                 <tbody id="marks-table">
-                    </tbody>
+                </tbody>
             </table>
 
             <div class="result-footer">
-                <p><strong>Status:</strong> <span id="res-status" class="pass-tag">pass</span></p>
+                <p><strong>Status:</strong> <span id="res-status"></span></p>
                 <button onclick="logout()" class="btn-secondary">Log Out</button>
             </div>
         </div>
     </div>
 
     <script>
-        // Students Data (Yahan Seenu ka data add ho gaya hai)
         const studentDatabase = {
             "1234": {
                 password: "12345",
                 name: "Seenu",
                 course: "ADCA (Advance Diploma in Computer Applications)",
                 marks: [
-                    { subject: "Computer Fundamentals", max: 100, obtained: 60 },
-                    { subject: "Operating System & MS Office", max: 100, obtained: 60 },
-                    { subject: "Internet & Web Designing", max: 100, obtained: 50 },
-                    
+                    { subject: "Computer Fundamentals", max: 100, obtained: 88 },
+                    { subject: "Operating System & MS Office", max: 100, obtained: 92 },
+                    { subject: "Internet & Web Designing", max: 100, obtained: 85 }
                 ]
             },
             "STU101": {
@@ -242,11 +255,21 @@
                 course: "ADCA (Advance Diploma)",
                 marks: [
                     { subject: "HTML & CSS", max: 100, obtained: 92 },
-                    { subject: "JavaScript Programming", max: 100, obtained: 81 },
+                    { subject: "JavaScript Programming", max: 100, obtained: 35 }, /* टेस्ट के लिए कम नंबर */
                     { subject: "Tally Prime ERP", max: 100, obtained: 88 }
                 ]
             }
         };
+
+        // सिंगल सब्जेक्ट का ग्रेड निकालने का फंक्शन
+        function calculateGrade(marks) {
+            if (marks >= 90) return "A+";
+            else if (marks >= 80) return "A";
+            else if (marks >= 70) return "B";
+            else if (marks >= 60) return "C";
+            else if (marks >= 50) return "D";
+            else return "F";
+        }
 
         function checkResult() {
             const studentId = document.getElementById("student-id").value.trim();
@@ -283,14 +306,52 @@
             const tableBody = document.getElementById("marks-table");
             tableBody.innerHTML = ""; 
 
+            let totalMax = 0;
+            let totalObtained = 0;
+            let isFailedAnySubject = false;
+
             student.marks.forEach(item => {
+                let grade = calculateGrade(item.obtained);
+                
+                // अगर किसी सब्जेक्ट में 50 से कम नंबर हैं तो उसे फेल (F) माना जाएगा
+                if (item.obtained < 50) {
+                    isFailedAnySubject = true;
+                }
+
+                totalMax += item.max;
+                totalObtained += item.obtained;
+
                 let row = `<tr>
                     <td>${item.subject}</td>
                     <td>${item.max}</td>
                     <td>${item.obtained}</td>
+                    <strong><td>${grade}</td></strong>
                 </tr>`;
                 tableBody.innerHTML += row;
             });
+
+            // कुल परसेंटेज और ओवरऑल ग्रेड
+            let percentage = (totalObtained / totalMax) * 100;
+            let finalGrade = calculateGrade(percentage);
+
+            // टेबल के नीचे Total वाली रो जोड़ना
+            let totalRow = `<tr class="total-row">
+                <td>Total / Overall</td>
+                <td>${totalMax}</td>
+                <td>${totalObtained} (${percentage.toFixed(1)}%)</td>
+                <td>${finalGrade}</td>
+            </tr>`;
+            tableBody.innerHTML += totalRow;
+
+            // पास या फेल का स्टेटस टैग सेट करना
+            const statusTag = document.getElementById("res-status");
+            if (isFailedAnySubject || percentage < 50) {
+                statusTag.innerText = "FAIL";
+                statusTag.className = "fail-tag";
+            } else {
+                statusTag.innerText = "PASS";
+                statusTag.className = "pass-tag";
+            }
         }
 
         function logout() {
