@@ -3,48 +3,51 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Student Result Portal</title>
-    
+    <title>Balaji Computer Center - Result Portal</title>
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Arial', sans-serif;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
 
         body {
-            background-color: #f4f7f6;
+            background-color: #f4f6f9;
+            color: #333;
             display: flex;
-            justify-content: center;
-            align-items: center;
+            flex-direction: column;
             min-height: 100vh;
         }
 
-        .container {
-            width: 100%;
-            max-width: 550px; /* टेबल में कॉलम बढ़ने की वजह से चौड़ाई थोड़ी बढ़ा दी है */
+        header {
+            background-color: #0056b3;
+            color: white;
+            text-align: center;
             padding: 20px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
         }
 
-        .card {
-            background: #ffffff;
+        header h1 {
+            font-size: 24px;
+            letter-spacing: 1px;
+        }
+
+        .container {
+            max-width: 500px;
+            width: 90%;
+            margin: 40px auto;
+            background: white;
             padding: 30px;
             border-radius: 10px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
         }
 
         h2 {
-            color: #2c3e50;
-            margin-bottom: 10px;
-            text-align: center;
-        }
-
-        .subtitle {
-            text-align: center;
-            color: #7f8c8d;
             margin-bottom: 20px;
-            font-size: 14px;
+            font-size: 20px;
+            color: #0056b3;
+            text-align: center;
         }
 
         .input-group {
@@ -54,8 +57,7 @@
         .input-group label {
             display: block;
             margin-bottom: 5px;
-            color: #34495e;
-            font-weight: bold;
+            font-weight: 600;
             font-size: 14px;
         }
 
@@ -64,312 +66,176 @@
             padding: 10px;
             border: 1px solid #ccc;
             border-radius: 5px;
-            outline: none;
             font-size: 16px;
+            outline: none;
+            transition: border 0.3s;
         }
 
         .input-group input:focus {
-            border-color: #3498db;
+            border-color: #0056b3;
         }
 
-        .btn {
+        button {
             width: 100%;
             padding: 12px;
-            background-color: #3498db;
-            border: none;
+            background-color: #0056b3;
             color: white;
+            border: none;
+            border-radius: 5px;
             font-size: 16px;
             font-weight: bold;
-            border-radius: 5px;
             cursor: pointer;
-            transition: 0.3s;
+            transition: background 0.3s;
         }
 
-        .btn:hover {
-            background-color: #2980b9;
+        button:hover {
+            background-color: #004085;
         }
 
-        .btn-secondary {
-            padding: 8px 15px;
-            background-color: #e74c3c;
-            border: none;
-            color: white;
-            border-radius: 4px;
-            cursor: pointer;
-        }
-
-        .error {
-            color: #e74c3c;
-            margin-top: 10px;
-            text-align: center;
-            font-size: 14px;
-            font-weight: bold;
-        }
-
-        /* Result Section Hidden Settings */
-        .hidden {
+        /* Result Card Styles */
+        .result-card {
             display: none;
+            margin-top: 25px;
+            border-top: 2px dashed #0056b3;
+            padding-top: 20px;
         }
 
-        .result-header {
-            text-align: center;
-            border-bottom: 2px solid #3498db;
-            padding-bottom: 10px;
-            margin-bottom: 15px;
-        }
-
-        .student-info {
-            margin-bottom: 20px;
-            line-height: 1.6;
-            background: #f9f9f9;
-            padding: 10px;
-            border-radius: 5px;
-        }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-bottom: 20px;
-        }
-
-        table th, table td {
-            border: 1px solid #ddd;
-            padding: 10px;
-            text-align: left;
-        }
-
-        table th {
-            background-color: #34495e;
-            color: white;
-        }
-
-        /* Total Row Styling */
-        .total-row {
-            font-weight: bold;
-            background-color: #eaeded;
-        }
-
-        .result-footer {
+        .result-row {
             display: flex;
             justify-content: space-between;
-            align-items: center;
-            border-top: 1px solid #ddd;
-            padding-top: 15px;
+            padding: 8px 0;
+            border-bottom: 1px solid #f1f1f1;
         }
 
-        .pass-tag {
-            background: #2ecc71;
-            color: white;
-            padding: 3px 10px;
-            border-radius: 3px;
-            font-weight: bold;
+        .result-row span:first-child {
+            font-weight: 600;
+            color: #666;
         }
-        
-        .fail-tag {
-            background: #e74c3c;
-            color: white;
-            padding: 3px 10px;
-            border-radius: 3px;
+
+        .status-badge {
+            padding: 4px 10px;
+            border-radius: 4px;
             font-weight: bold;
+            color: white;
+        }
+
+        .pass { background-color: #28a745; }
+        .fail { background-color: #dc3545; }
+
+        .error-msg {
+            color: #dc3545;
+            text-align: center;
+            margin-top: 15px;
+            display: none;
+            font-weight: 600;
         }
     </style>
 </head>
 <body>
 
+    <header>
+        <h1>BALAJI COMPUTER CENTER</h1>
+        <p>Online Student Verification & Result Portal</p>
+
+
+          <PRE>        📞  +91 9971800189  |  📧  BALAJICOMPUTER1307@GAMIL.COM</PRE>      
+    </header>
+<br><Br>
+<MARQUEE> बालाजी कंप्यूटर सेंटर की वेबसाइट बस रिजल्ट चेक करने के लिए बनाई गई है अगर किसी और जानकारी के लिए   आप बालाजी कंप्यूटर सेंटर की मूल वेबसाइट (www.balajicomputercenter.in) पर प्रति विजिट क्र सकते हैं या <font color="red">बालाजी कंप्यूटर सेंटर के विभागाध्यक्ष  ( GUDIA DEVI )से संपर्क कर सकते हैं </FONT></marquee>
+
     <div class="container">
-        <div id="login-box" class="card">
-            <h2>Student Login</h2>
-            <p class="subtitle">Enter your details to check your result</p>
-            
-            <div class="input-group">
-                <label for="student-id">Roll Number / Student ID</label>
-                <input type="text" id="student-id" placeholder="Eg. 1234" required>
-            </div>
-
-            <div class="input-group">
-                <label for="password">Password</label>
-                <input type="password" id="password" placeholder="Enter Password" required>
-            </div>
-
-            <button onclick="checkResult()" class="btn">View Result</button>
-            <p id="error-msg" class="error"></p>
+        <h2>Student Login / Check Result</h2>
+         
+        <div class="input-group">
+            <label for="rollNo">Roll Number</label>
+            <input type="text" id="rollNo" placeholder="e.g., 1307***">
         </div>
 
-        <div id="result-box" class="card hidden">
-            <div class="result-header">
-                <h2>Balaji Computer Center</h2>
-                <p>Official Student Progress Report</p>
-            </div>
-            
-            <div class="student-info">
-                <p><strong>Student Name:</strong> <span id="res-name"></span></p>
-                <p><strong>Roll No:</strong> <span id="res-id"></span></p>
-                <p><strong>Course:</strong> <span id="res-course"></span></p>
-            </div>
+        <div class="input-group">
+            <label for="password">Password</label>
+            <input type="password" id="password" placeholder="Enter your Password/DOB">
+        </div>
 
-            <table>
-                <thead>
-                    <tr>
-                        <th>Subject / Topic</th>
-                        <th>Max Marks</th>
-                        <th>Marks Obtained</th>
-                        <th>Grade</th>
-                    </tr>
-                </thead>
-                <tbody id="marks-table">
-                </tbody>
-            </table>
+        <button onclick="checkResult()">Login & View Result</button>
 
-            <div class="result-footer">
-                <p><strong>Status:</strong> <span id="res-status"></span></p>
-                <button onclick="logout()" class="btn-secondary">Log Out</button>
+        <div id="errorBox" class="error-msg">Invalid Roll Number or Password!</div>
+
+        <div id="resultCard" class="result-card">
+            <h2>Mark Sheet / Verification</h2>
+            <div class="result-row">
+                <span>Roll No:</span>
+                <span id="resRoll"></span>
+            </div>
+            <div class="result-row">
+                <span>Name:</span>
+                <span id="resName"></span>
+            </div>
+            <div class="result-row">
+                <span>Course:</span>
+                <span id="resCourse"></span>
+            </div>
+            <div class="result-row">
+                <span>Total Marks:</span>
+                <span>80</span>
+            </div>
+            <div class="result-row">
+                <span>Marks Obtained:</span>
+                <span id="resMarks"></span>
+            </div>
+            <div class="result-row">
+                <span>Status:</span>
+                <span id="resStatus" class="status-badge"></span>
             </div>
         </div>
     </div>
 
     <script>
-        const studentDatabase = {
-            "1307825": {
-                password: "10051999",
-                name: "Seenu",
-                course: "ADCA (Advance Diploma in Computer Applications)",
-                marks: [
-                    { subject: "Computer Fundamentals", max: 100, obtained: 80 },
-                    { subject: "Operating System & MS Office", max: 100, obtained: 80 },
-                    { subject: "Internet & Web Designing", max: 100, obtained: 60 }
-                ]
-            },
-            "1307889": {
-                password: "12022004",
-                name: "Jaya Kumari",
-                course: "ADCA (Advance Diploma in Computer Applications)",
-                marks: [
-                    { subject: "Fundamental of Computer", max: 100, obtained: 80 },
-                    { subject: "MS Office (Word, Excel, PPT)", max: 100, obtained: 80 },
-                    { subject: "Internet & Web Technology", max: 100, obtained: 60 }
-                ]
-            },
-            "1307708": {
-                password: "30062008",
-                name: "Aryan Pandey",
-                course: "ADCA (Advance Diploma in Computer Application)",
-                marks: [
-                    { subject: "Computer of Fundamental", max: 100, obtained: 80 },
-                    { subject: "Ms Office ", max: 100, obtained: 50 }, /* टेस्ट के लिए कम नंबर */
-                    { subject: "Internet & Web Technology", max: 100, obtained: 60 }
-                ]
-            },
-            "1307908": {
-                password: "16032010",
-                name: "Roshan",
-                course: "ADCA (Advance Diploma in Computer Application)",
-                marks: [
-                    { subject: "Computer of Fundamental", max: 100, obtained: 80 },
-                    { subject: "Ms Office ", max: 100, obtained: 60 }, /* टेस्ट के लिए कम नंबर */
-                    { subject: "Internet & Web Technology", max: 100, obtained: 60 }
-                ]
-            }
-        };
-
-        // सिंगल सब्जेक्ट का ग्रेड निकालने का फंक्शन
-        function calculateGrade(marks) {
-            if (marks >= 90) return "A+";
-            else if (marks >= 80) return "A";
-            else if (marks >= 70) return "B";
-            else if (marks >= 60) return "C";
-            else if (marks >= 50) return "D";
-            else return "F";
-        }
+        // Updated Database: Sabhi students ke liye password add kar diya hai
+        const studentDatabase = [
+            { roll: "1307819", password: "03102012", name: "RITIKA", course: "DCA", marks: 40 },
+            { roll: "1307777", password: "19102009", name: "RISHITA NAMDEV", course: "DCA-T", marks: 58 },
+            { roll: "1307814", password: "02032007", name: "MANISHA", course: "ADCA", marks: 60 }
+        ];
 
         function checkResult() {
-            const studentId = document.getElementById("student-id").value.trim();
-            const password = document.getElementById("password").value;
-            const errorMsg = document.getElementById("error-msg");
+            const inputRoll = document.getElementById('rollNo').value.trim().toUpperCase();
+            // Yahan input se password le rahe hain
+            const inputPassword = document.getElementById('password').value.trim();
+             
+            const errorBox = document.getElementById('errorBox');
+            const resultCard = document.getElementById('resultCard');
 
-            if (studentId === "" || password === "") {
-                errorMsg.innerText = "Please fill all fields.";
-                return;
-            }
+            // FIX: Yahan ab student.roll aur student.password match hoga
+            const student = studentDatabase.find(s => 
+                s.roll === inputRoll && s.password === inputPassword
+            );
 
-            if (studentDatabase[studentId]) {
-                const student = studentDatabase[studentId];
+            if (student) {
+                errorBox.style.display = 'none';
 
-                if (student.password === password) {
-                    errorMsg.innerText = ""; 
-                    showResult(studentId, student);
+                // Marksheet me data fill karein
+                document.getElementById('resRoll').innerText = student.roll;
+                document.getElementById('resName').innerText = student.name;
+                document.getElementById('resCourse').innerText = student.course;
+                document.getElementById('resMarks').innerText = student.marks;
+
+                // Pass/Fail auto check
+                const statusBadge = document.getElementById('resStatus');
+                if (student.marks >= 40) {
+                    statusBadge.innerText = "PASS";
+                    statusBadge.className = "status-badge pass";
                 } else {
-                    errorMsg.innerText = "Incorrect Password!";
-                }
-            } else {
-                errorMsg.innerText = "Student ID not found!";
-            }
-        }
-
-        function showResult(id, student) {
-            document.getElementById("login-box").classList.add("hidden");
-            document.getElementById("result-box").classList.remove("hidden");
-
-            document.getElementById("res-name").innerText = student.name;
-            document.getElementById("res-id").innerText = id;
-            document.getElementById("res-course").innerText = student.course;
-
-            const tableBody = document.getElementById("marks-table");
-            tableBody.innerHTML = ""; 
-
-            let totalMax = 0;
-            let totalObtained = 0;
-            let isFailedAnySubject = false;
-
-            student.marks.forEach(item => {
-                let grade = calculateGrade(item.obtained);
-                
-                // अगर किसी सब्जेक्ट में 50 से कम नंबर हैं तो उसे फेल (F) माना जाएगा
-                if (item.obtained < 50) {
-                    isFailedAnySubject = true;
+                    statusBadge.innerText = "FAIL";
+                    statusBadge.className = "status-badge fail";
                 }
 
-                totalMax += item.max;
-                totalObtained += item.obtained;
-
-                let row = `<tr>
-                    <td>${item.subject}</td>
-                    <td>${item.max}</td>
-                    <td>${item.obtained}</td>
-                    <strong><td>${grade}</td></strong>
-                </tr>`;
-                tableBody.innerHTML += row;
-            });
-
-            // कुल परसेंटेज और ओवरऑल ग्रेड
-            let percentage = (totalObtained / totalMax) * 100;
-            let finalGrade = calculateGrade(percentage);
-
-            // टेबल के नीचे Total वाली रो जोड़ना
-            let totalRow = `<tr class="total-row">
-                <td>Total / Overall</td>
-                <td>${totalMax}</td>
-                <td>${totalObtained} (${percentage.toFixed(1)}%)</td>
-                <td>${finalGrade}</td>
-            </tr>`;
-            tableBody.innerHTML += totalRow;
-
-            // पास या फेल का स्टेटस टैग सेट करना
-            const statusTag = document.getElementById("res-status");
-            if (isFailedAnySubject || percentage < 50) {
-                statusTag.innerText = "FAIL";
-                statusTag.className = "fail-tag";
+                resultCard.style.display = 'block';
             } else {
-                statusTag.innerText = "PASS";
-                statusTag.className = "pass-tag";
+                resultCard.style.display = 'none';
+                errorBox.style.display = 'block';
             }
-        }
-
-        function logout() {
-            document.getElementById("student-id").value = "";
-            document.getElementById("password").value = "";
-            document.getElementById("result-box").classList.add("hidden");
-            document.getElementById("login-box").classList.remove("hidden");
         }
     </script>
+      
 </body>
 </html>
