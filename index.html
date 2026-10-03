@@ -1,241 +1,504 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Balaji Computer Center - Result Portal</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Balaji Computer Center - Result Portal</title>
 
-        body {
-            background-color: #f4f6f9;
-            color: #333;
-            display: flex;
-            flex-direction: column;
-            min-height: 100vh;
-        }
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Arial, sans-serif;
+}
 
-        header {
-            background-color: #0056b3;
-            color: white;
-            text-align: center;
-            padding: 20px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-        }
+body{
+    background:#f2f5f9;
+    color:#333;
+}
 
-        header h1 {
-            font-size: 24px;
-            letter-spacing: 1px;
-        }
+header{
+    background:#0056b3;
+    color:white;
+    text-align:center;
+    padding:25px 10px;
+}
 
-        .container {
-            max-width: 500px;
-            width: 90%;
-            margin: 40px auto;
-            background: white;
-            padding: 30px;
-            border-radius: 10px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
-        }
+header h1{
+    font-size:28px;
+}
 
-        h2 {
-            margin-bottom: 20px;
-            font-size: 20px;
-            color: #0056b3;
-            text-align: center;
-        }
+header p{
+    margin-top:7px;
+}
 
-        .input-group {
-            margin-bottom: 15px;
-        }
+.container{
+    max-width:500px;
+    margin:35px auto;
+    background:white;
+    padding:30px;
+    border-radius:12px;
+    box-shadow:0 5px 20px rgba(0,0,0,0.12);
+}
 
-        .input-group label {
-            display: block;
-            margin-bottom: 5px;
-            font-weight: 600;
-            font-size: 14px;
-        }
+h2{
+    text-align:center;
+    color:#0056b3;
+    margin-bottom:25px;
+}
 
-        .input-group input {
-            width: 100%;
-            padding: 10px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            font-size: 16px;
-            outline: none;
-            transition: border 0.3s;
-        }
+.input-group{
+    margin-bottom:18px;
+}
 
-        .input-group input:focus {
-            border-color: #0056b3;
-        }
+.input-group label{
+    display:block;
+    font-weight:bold;
+    margin-bottom:7px;
+}
 
-        button {
-            width: 100%;
-            padding: 12px;
-            background-color: #0056b3;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            font-size: 16px;
-            font-weight: bold;
-            cursor: pointer;
-            transition: background 0.3s;
-        }
+.input-group input{
+    width:100%;
+    padding:12px;
+    border:1px solid #ccc;
+    border-radius:6px;
+    font-size:15px;
+}
 
-        button:hover {
-            background-color: #004085;
-        }
+.btn-login{
+    width:100%;
+    padding:13px;
+    background:#0056b3;
+    color:white;
+    border:none;
+    border-radius:6px;
+    font-size:16px;
+    font-weight:bold;
+    cursor:pointer;
+}
 
-        /* Result Card Styles */
-        .result-card {
-            display: none;
-            margin-top: 25px;
-            border-top: 2px dashed #0056b3;
-            padding-top: 20px;
-        }
+.btn-login:hover{
+    background:#003f85;
+}
 
-        .result-row {
-            display: flex;
-            justify-content: space-between;
-            padding: 8px 0;
-            border-bottom: 1px solid #f1f1f1;
-        }
+.error{
+    display:none;
+    color:red;
+    text-align:center;
+    margin-top:15px;
+    font-weight:bold;
+}
 
-        .result-row span:first-child {
-            font-weight: 600;
-            color: #666;
-        }
+.result-card{
+    display:none;
+    margin-top:25px;
+    border:2px solid #0056b3;
+    border-radius:10px;
+    padding:20px;
+    background:#fafafa;
+}
 
-        .status-badge {
-            padding: 4px 10px;
-            border-radius: 4px;
-            font-weight: bold;
-            color: white;
-        }
+.result-title{
+    text-align:center;
+    color:#0056b3;
+    border-bottom:2px solid #0056b3;
+    padding-bottom:12px;
+    margin-bottom:15px;
+}
 
-        .pass { background-color: #28a745; }
-        .fail { background-color: #dc3545; }
+.result-row{
+    display:flex;
+    justify-content:space-between;
+    padding:11px 0;
+    border-bottom:1px solid #ddd;
+}
 
-        .error-msg {
-            color: #dc3545;
-            text-align: center;
-            margin-top: 15px;
-            display: none;
-            font-weight: 600;
-        }
-    </style>
+.result-row span:first-child{
+    font-weight:bold;
+}
+
+.status{
+    padding:5px 15px;
+    border-radius:5px;
+    color:white;
+    font-weight:bold;
+}
+
+.pass{
+    background:green;
+}
+
+.fail{
+    background:red;
+}
+
+.print-btn{
+    width:100%;
+    margin-top:18px;
+    padding:12px;
+    border:none;
+    border-radius:6px;
+    background:#28a745;
+    color:white;
+    font-weight:bold;
+    cursor:pointer;
+}
+
+.logout-btn{
+    width:100%;
+    margin-top:10px;
+    padding:10px;
+    border:none;
+    border-radius:6px;
+    background:#dc3545;
+    color:white;
+    font-weight:bold;
+    cursor:pointer;
+}
+
+footer{
+    text-align:center;
+    background:#222;
+    color:white;
+    padding:15px;
+    margin-top:50px;
+}
+
+@media print{
+    body *{
+        visibility:hidden;
+    }
+
+    .result-card,
+    .result-card *{
+        visibility:visible;
+    }
+
+    .result-card{
+        position:absolute;
+        left:0;
+        top:0;
+        width:100%;
+        border:none;
+    }
+
+    .print-btn,
+    .logout-btn{
+        display:none;
+    }
+}
+</style>
 </head>
+
 <body>
 
-    <header>
-        <h1>BALAJI COMPUTER CENTER</h1>
-        <p>Online Student Verification & Result Portal</p>
+<header>
+    <h1>BALAJI COMPUTER CENTER</h1>
+    <p>Online Student Result Portal</p>
+</header>
 
+<div class="container">
 
-          <PRE>        📞  +91 9971800189  |  📧  BALAJICOMPUTER1307@GAMIL.COM</PRE>      
-    </header>
-<br><Br>
-<MARQUEE> बालाजी कंप्यूटर सेंटर की वेबसाइट बस रिजल्ट चेक करने के लिए बनाई गई है अगर किसी और जानकारी के लिए   आप बालाजी कंप्यूटर सेंटर की मूल वेबसाइट (www.balajicomputercenter.in) पर प्रति विजिट क्र सकते हैं या <font color="red">बालाजी कंप्यूटर सेंटर के विभागाध्यक्ष  ( GUDIA DEVI )से संपर्क कर सकते हैं </FONT></marquee>
+    <h2>Student Login</h2>
 
-    <div class="container">
-        <h2>Student Login / Check Result</h2>
-         
-        <div class="input-group">
-            <label for="rollNo">Roll Number</label>
-            <input type="text" id="rollNo" placeholder="e.g., 1307***">
-        </div>
-
-        <div class="input-group">
-            <label for="password">Password</label>
-            <input type="password" id="password" placeholder="Enter your Password/DOB">
-        </div>
-
-        <button onclick="checkResult()">Login & View Result</button>
-
-        <div id="errorBox" class="error-msg">Invalid Roll Number or Password!</div>
-
-        <div id="resultCard" class="result-card">
-            <h2>Mark Sheet / Verification</h2>
-            <div class="result-row">
-                <span>Roll No:</span>
-                <span id="resRoll"></span>
-            </div>
-            <div class="result-row">
-                <span>Name:</span>
-                <span id="resName"></span>
-            </div>
-            <div class="result-row">
-                <span>Course:</span>
-                <span id="resCourse"></span>
-            </div>
-            <div class="result-row">
-                <span>Total Marks:</span>
-                <span>80</span>
-            </div>
-            <div class="result-row">
-                <span>Marks Obtained:</span>
-                <span id="resMarks"></span>
-            </div>
-            <div class="result-row">
-                <span>Status:</span>
-                <span id="resStatus" class="status-badge"></span>
-            </div>
-        </div>
+    <div class="input-group">
+        <label>Student ID</label>
+        <input type="text" id="studentId"
+               placeholder="Enter Student ID">
     </div>
 
-    <script>
-        // Updated Database: Sabhi students ke liye password add kar diya hai
-        const studentDatabase = [
-            { roll: "1307819", password: "03102012", name: "RITIKA", course: "DCA", marks: 40 },
-            { roll: "1307777", password: "19102009", name: "RISHITA NAMDEV", course: "DCA-T", marks: 58 },
-            { roll: "1307814", password: "02032007", name: "MANISHA", course: "ADCA", marks: 60 }
-        ];
+    <div class="input-group">
+        <label>Password</label>
+        <input type="password" id="password"
+               placeholder="Enter Password">
+    </div>
 
-        function checkResult() {
-            const inputRoll = document.getElementById('rollNo').value.trim().toUpperCase();
-            // Yahan input se password le rahe hain
-            const inputPassword = document.getElementById('password').value.trim();
-             
-            const errorBox = document.getElementById('errorBox');
-            const resultCard = document.getElementById('resultCard');
+    <button class="btn-login" onclick="login()">
+        Login & View Result
+    </button>
 
-            // FIX: Yahan ab student.roll aur student.password match hoga
-            const student = studentDatabase.find(s => 
-                s.roll === inputRoll && s.password === inputPassword
-            );
+    <div class="error" id="error">
+        Invalid Student ID or Password!
+    </div>
 
-            if (student) {
-                errorBox.style.display = 'none';
+    <!-- RESULT -->
+    <div class="result-card" id="resultCard">
 
-                // Marksheet me data fill karein
-                document.getElementById('resRoll').innerText = student.roll;
-                document.getElementById('resName').innerText = student.name;
-                document.getElementById('resCourse').innerText = student.course;
-                document.getElementById('resMarks').innerText = student.marks;
+        <div class="result-title">
+            <h3>OFFICIAL MARK SHEET</h3>
+            <p>Balaji Computer Center</p>
+        </div>
 
-                // Pass/Fail auto check
-                const statusBadge = document.getElementById('resStatus');
-                if (student.marks >= 40) {
-                    statusBadge.innerText = "PASS";
-                    statusBadge.className = "status-badge pass";
-                } else {
-                    statusBadge.innerText = "FAIL";
-                    statusBadge.className = "status-badge fail";
-                }
+        <div class="result-row">
+            <span>Student ID</span>
+            <span id="resultId"></span>
+        </div>
 
-                resultCard.style.display = 'block';
-            } else {
-                resultCard.style.display = 'none';
-                errorBox.style.display = 'block';
-            }
+        <div class="result-row">
+            <span>Student Name</span>
+            <span id="resultName"></span>
+        </div>
+
+        <div class="result-row">
+            <span>Course</span>
+            <span id="resultCourse"></span>
+        </div>
+
+        <div class="result-row">
+            <span>Total Marks</span>
+            <span>60</span>
+        </div>
+
+        <div class="result-row">
+            <span>Marks Obtained</span>
+            <span id="resultMarks"></span>
+        </div>
+
+        <div class="result-row">
+            <span>Status</span>
+            <span id="resultStatus"></span>
+        </div>
+
+        <div class="result-row">
+            <span>Result Date</span>
+            <span id="resultDate"></span>
+        </div>
+
+        <button class="print-btn" onclick="window.print()">
+            Print / Download Result
+        </button>
+
+        <button class="logout-btn" onclick="logout()">
+            Logout
+        </button>
+
+    </div>
+
+</div>
+
+<footer>
+    © 2026 Balaji Computer Center | All Rights Reserved
+</footer>
+
+
+<script>
+
+/* ================================
+   STUDENT DATABASE
+   ID + PASSWORD + RESULT
+================================ */
+
+const students = [
+
+    {
+        id: "1307842",
+        password: "03042010",
+        name: "SANTOSH",
+        course: "Digital Marketing",
+        marks: "NO RESULT"
+    },
+
+    {
+        id: "1307841",
+        password: "06122008",
+        name: "NISHA",
+        course: "Digital Marketing",
+        marks: 48
+    },
+
+    {
+        id: "1307818",
+        password: "15052002",
+        name: "AANCHAL",
+        course: "Word",
+        marks: 50
+    },
+
+    {
+        id: "1307835",
+        password: "25032008",
+        name: "TANISHQ",
+        course: "Advanced Excel",
+        marks: 52
+    },
+{
+        id: "1307202",
+        password: "06092007",
+        name: "HARSH",
+        course: "EXCEL",
+        marks: 45
+    },
+{
+        id: "1307814",
+        password: "02032007",
+        name: "MANISHA",
+        course: "Advanced Excel",
+        marks: 57
+    },
+
+{
+        id: "1307826",
+        password: "26012009",
+        name: "PRINCE",
+        course: "Advanced Excel",
+        marks: 48
+    },
+{
+        id: "1307832",
+        password: "28012009",
+        name: "ANAND",
+        course: "Advanced Excel",
+        marks: 60
+    },
+{
+        id: "1307905",
+        password: "25052007",
+        name: "KHUSHI",
+        course: "Advanced Excel",
+        marks: 52
+    },
+{
+        id: "1307820",
+        password: "28012015",
+        name: "RIDDHI",
+        course: "Excel",
+        marks: "NO RESULT"
+    },
+{
+        id: "1307777",
+        password: "19102009",
+        name: "RISHITA",
+        course: "Advanced Excel",
+        marks: 57
+    },
+{
+        id: "1307812",
+        password: "01012009",
+        name: "chandani",
+        course: "Excel",
+        marks: 30
+    }
+];
+
+
+/* ================================
+   LOGIN FUNCTION
+================================ */
+
+function login(){
+
+    let id = document
+        .getElementById("studentId")
+        .value
+        .trim()
+        .toUpperCase();
+
+    let password = document
+        .getElementById("password")
+        .value;
+
+    let error = document.getElementById("error");
+    let resultCard = document.getElementById("resultCard");
+
+
+    /* FIND STUDENT */
+
+    let student = students.find(function(s){
+
+        return s.id === id &&
+               s.password === password;
+
+    });
+
+
+    /* IF LOGIN SUCCESS */
+
+    if(student){
+
+        error.style.display = "none";
+
+        document.getElementById("resultId")
+            .innerText = student.id;
+
+        document.getElementById("resultName")
+            .innerText = student.name;
+
+        document.getElementById("resultCourse")
+            .innerText = student.course;
+
+        document.getElementById("resultMarks")
+            .innerText = student.marks;
+
+
+        /* PASS / FAIL */
+
+        let status = document.getElementById("resultStatus");
+
+        if(student.marks >= 20){
+
+            status.innerText = "PASS";
+            status.className = "status pass";
+
+        }else{
+
+            status.innerText = "FAIL";
+            status.className = "status fail";
+
         }
-    </script>
-      
+
+
+        /* DATE */
+
+        document.getElementById("resultDate")
+            .innerText =
+            new Date().toLocaleDateString("en-IN");
+
+
+        resultCard.style.display = "block";
+
+    }
+
+    /* IF LOGIN FAILED */
+
+    else{
+
+        resultCard.style.display = "none";
+
+        error.style.display = "block";
+
+    }
+
+}
+
+
+/* ================================
+   LOGOUT
+================================ */
+
+function logout(){
+
+    document.getElementById("studentId").value = "";
+    document.getElementById("password").value = "";
+
+    document.getElementById("resultCard")
+        .style.display = "none";
+
+    document.getElementById("error")
+        .style.display = "none";
+
+}
+
+</script>
+<div class="result-row">
+    <span>Exam Checker Name</span>
+    <span>Ankit</span>
+</div>
+
+<div class="result-row">
+    <span>Head of Center (BCC)</span>
+    <span>Gudia Devi</span>
+</div>
+
 </body>
 </html>
